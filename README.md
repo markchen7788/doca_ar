@@ -14,7 +14,7 @@
 
 <table >
     <thead>
-    <tr>
+    <tr align="center">
         <th>FlowNum</td>
         <th>MessageSize</td>
         <th colspan=3>Test Times</td>
@@ -26,7 +26,7 @@
         <td colspan=3>30 times</td>
     </tr>
     <thead>
-    <tr>
+    <tr align="center">
         <th>Network Load</td>
         <th>Load Balancing Scheme</td>
         <th>MaxFCT-Min[ms]</td>
@@ -64,7 +64,7 @@
 
 <table >
     <thead>
-    <tr>
+    <tr align="center">
         <th>FlowNum</td>
         <th>MessageSize</td>
         <th colspan=3>Test Times</td>
@@ -76,7 +76,7 @@
         <td colspan=3>30 times</td>
     </tr>
     <thead>
-    <tr>
+    <tr align="center">
         <th>Network Load</td>
         <th>Load Balancing Scheme</td>
         <th>MaxFCT-Min[ms]</td>
