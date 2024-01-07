@@ -1,7 +1,8 @@
-# doca_ar
+![doca-ar-logo.png](./docs/logo.png)
+# DOCA-AR
 
 #### 介绍
-Offloading DOCA-based Adaptive Routing onto NVIDIA BlueField-2 DPU.(卸载基于DOCA的自适应路由到NVIDIA BlueField-2 DPU上)
+基于DOCA的自适应路由
 
 #### 软件架构
 软件架构说明
