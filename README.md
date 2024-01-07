@@ -3,10 +3,115 @@
 
 #### 介绍
 * 简介：基于DOCA的自适应路由
-    * 利用NVIDIA BlueField-2 DPU卸载基于主动探测的自适应路由算法，实现VXLAN等overlay流量的逐流负载均衡;
-    * DOCA-AR实现了基于全局拥塞感知的负载均衡，通过在端侧发送探测报文获取拥塞状态并帮助流量避开拥塞点从而改善尾时延；
-    * DOCA-AR部署在DPU，既拥有主机方案易感知全局状态的特点，也拥有交换机方案不修改主机协议栈的优势。
-* 表现：如下是在我们的多路径网络下测试的结果
+    1. 利用NVIDIA BlueField-2 DPU卸载基于主动探测的自适应路由算法，实现VXLAN等overlay流量的逐流负载均衡;
+    2. DOCA-AR实现了基于全局拥塞感知的负载均衡，通过在端侧发送探测报文获取拥塞状态并帮助流量避开拥塞点从而改善尾时延；
+    3. DOCA-AR部署在DPU，既拥有主机方案易感知全局状态的特点，也拥有交换机方案不修改主机协议栈的优势。
+* 表现：如下是在我们的多路径网络下测试的结果,
+    1. 第一张表，测试了10条5MB大小的流的最大完成时间（MaxFCT:尾时延）；
+    2. 第二张表，测试了50条5MB大小的流的最大完成时间（MaxFCT:尾时延）；
+    3. “With an 40Gbps Elephant Flow”代表引入一条40Gbps的大象流致使一条路径产生拥塞；
+    4. 可以看出相对于ECMP,DOCA-AR能够很好的避开拥塞点，改善尾时延。
+
+<table >
+    <thead>
+    <tr>
+        <th>FlowNum</td>
+        <th>MessageSize</td>
+        <th colspan=3>Test Times</td>
+    </tr>
+    </thead>
+    <tr align="center">
+        <td>10</td>
+        <td>5MB</td>
+        <td colspan=3>30 times</td>
+    </tr>
+    <thead>
+    <tr>
+        <th>Network Load</td>
+        <th>Load Balancing Scheme</td>
+        <th>MaxFCT-Min[ms]</td>
+        <th>MaxFCT-Max[ms]</td>
+        <th>MaxFCT-Avg[ms]</td>
+    </tr>
+    <thead>
+    <tr align="center">
+        <td rowspan=2>With an 40Gbps Elephant Flow</td>
+        <td>DOCA-AR</td>
+        <td>22.74</td>
+        <td>231.29</td>
+        <td>34.21</td>
+    </tr>
+    <tr align="center">
+        <td>ECMP</td>
+        <td>27.41</td>
+        <td>1709.99</td>
+        <td>920.81</td>
+    </tr>
+    <tr align="center">
+        <td rowspan=2>No Elephant Flow</td>
+        <td>DOCA-AR</td>
+        <td>23.54</td>
+        <td>34.49</td>
+        <td>27.32</td>
+    </tr>
+    <tr align="center">
+        <td>ECMP</td>
+        <td>20.42</td>
+        <td>35.1</td>
+        <td>26.97</td>
+    </tr>
+</table>
+
+<table >
+    <thead>
+    <tr>
+        <th>FlowNum</td>
+        <th>MessageSize</td>
+        <th colspan=3>Test Times</td>
+    </tr>
+    </thead>
+    <tr align="center">
+        <td>50</td>
+        <td>5MB</td>
+        <td colspan=3>30 times</td>
+    </tr>
+    <thead>
+    <tr>
+        <th>Network Load</td>
+        <th>Load Balancing Scheme</td>
+        <th>MaxFCT-Min[ms]</td>
+        <th>MaxFCT-Max[ms]</td>
+        <th>MaxFCT-Avg[ms]</td>
+    </tr>
+    <thead>
+    <tr align="center">
+        <td rowspan=2>With an 40Gbps Elephant Flow</td>
+        <td>DOCA-AR</td>
+        <td>103.45</td>
+        <td>1535.76</td>
+        <td>334.52</td>
+    </tr>
+    <tr align="center">
+        <td>ECMP</td>
+        <td>1127.96</td>
+        <td>2235.71</td>
+        <td>1857.05</td>
+    </tr>
+    <tr align="center">
+        <td rowspan=2>No Elephant Flow</td>
+        <td>DOCA-AR</td>
+        <td>98.35</td>
+        <td>292.31</td>
+        <td>221.72</td>
+    </tr>
+    <tr align="center">
+        <td>ECMP</td>
+        <td>100.83</td>
+        <td>289.77</td>
+        <td>236.18</td>
+    </tr>
+</table>
+
 
 * 背景：
     * 云计算和AI等技术的蓬勃发展，数据中心东西向流量逐渐增多，带宽跃升至100Gbps甚至400Gbps；
