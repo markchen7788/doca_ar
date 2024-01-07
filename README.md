@@ -2,7 +2,29 @@
 # DOCA-AR
 
 #### 介绍
-基于DOCA的自适应路由
+* 简介：基于DOCA的自适应路由
+    * 利用NVIDIA BlueField-2 DPU卸载基于主动探测的自适应路由算法，实现VXLAN等overlay流量的逐流负载均衡;
+    * DOCA-AR实现了基于全局拥塞感知的负载均衡，通过在端侧发送探测报文获取拥塞状态并帮助流量避开拥塞点从而改善尾时延；
+    * DOCA-AR部署在DPU，既拥有主机方案易感知全局状态的特点，也拥有交换机方案不修改主机协议栈的优势。
+* 背景：
+    * 云计算和AI等技术的蓬勃发展，数据中心东西向流量逐渐增多，带宽跃升至100Gbps甚至400Gbps；
+    * 数据中心网络通常是Spine-Leaf等包含冗余链路的多路径架构，服务器之间的流量通常会被路由到不同路径来实现网络负载均衡，从而提高链路利用率、提升吞吐并改善流量的传输完成时间(FCT)；
+    * 数据中心的并发场景下，通常大家会更关注长尾时延（类似木桶效应，最坏的情况决定整体表现），网络负载越均衡尾时延通常也会越小；
+    * DCN(数据中心网络)负载均衡一直是热议话题，几乎每年的网络顶会都会出现相关文章，我们将它们划分成了不同类型：
+        * 按照是否感知拥塞状态分类：
+            * 感知拥塞，例如CONGA，能避开拥塞点但开销大；
+            * 不感知拥塞，例如ECMP，开销小但不能避开拥塞点；
+        * 按照调度粒度分类：
+            * 逐流,例如ECMP，PLB，开销最小但是粒度大；
+            * 逐flowlet，例如CONGA；
+            * 逐包，例如NVIDIA spectrum自带的Adaptive Routing，乱序导致开销大但是粒度细；
+        * 按照实现位置分类：
+            * 基于交换机，例如NVIDIA Spectrum自带的Adaptive Routing，不易感知全局拥塞状态、实现比端侧难但不需要端侧修改协议栈；
+            * 基于Host，例如CLOVE，容易感知全局拥塞状态但通常需要修改主机协议栈；
+            * 基于控制器，例如Fastpass；
+    * 目前数据中心比较常用的网络层负载均衡机制是ECMP，它采用逐流、无状态的调度，不感知本地的拥塞状态也不感知全局的拥塞状态；
+* 价值：
+* 表现：
 
 #### 软件架构
 软件架构说明
@@ -20,19 +42,6 @@
 2.  xxxx
 3.  xxxx
 
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+#### 演示及文档
+* 演示视频已上传至百度网盘，点我可前往查看实验过程；
+* 点我可查看API文档
