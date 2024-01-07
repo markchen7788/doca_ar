@@ -1,0 +1,87 @@
+/*
+ * Copyright (c) 2021-2022 NVIDIA CORPORATION & AFFILIATES, ALL RIGHTS RESERVED.
+ *
+ * This software product is a proprietary product of NVIDIA CORPORATION &
+ * AFFILIATES (the "Company") and all right, title, and interest in and to the
+ * software product, including all associated intellectual property rights, are
+ * and shall remain exclusively with the Company.
+ *
+ * This software product is governed by the End User License Agreement
+ * provided with the software product.
+ *
+ */
+
+syntax = "proto3";
+
+/* Server Port Number - Per Application */
+enum eNetworkPort
+{
+	/* First Enum value in protobuf must be 0... */
+	k_DummyValue = 0;
+
+	/***********************/
+	/* DOCA Infrastructure */
+	/***********************/
+
+	/* DOCA gRPC Orchestrator */
+	k_DocaGrpcOrchestrator = 51000;
+
+	/*********************/
+	/* DOCA Applications */
+	/*********************/
+
+	/* URL Filter */
+	k_UrlFilter = 51010;
+
+	/* DNS Filter */
+	k_DnsFilter = 51011;
+
+	/* Application Recognition */
+	k_ApplicationRecognition = 51012;
+
+	/* IPS */
+	k_Ips = 51013;
+
+	/******************/
+	/* DOCA Libraries */
+	/******************/
+
+	/* DOCA DPI gRPC */
+	k_DocaDPI = 52000;
+
+	/* DOCA Flow gRPC */
+	k_DocaFlow = 53000;
+};
+
+message LogRecord {
+    string log_line = 1;
+}
+
+/* DPU (Arm - gRPC Service) -> DPU (Arm - gRPC Application):
+ * =========================================================
+ * DOCA gRPC management API to allow the service to orchestrate
+ * the gRPC-supported applications.
+ */
+ service DocaOrchestration {
+	/* Perform a Health Check (Ping) to a given gRPC-Supported App */
+	rpc HealthCheck (HealthCheckReq) returns (HealthCheckResp);
+
+	/* Destroy a given gRPC-Supported App */
+	rpc Destroy (DestroyReq) returns (DestroyResp);
+}
+
+/* Here for future compatibility */
+message HealthCheckReq {
+}
+
+/* Here for future compatibility */
+message HealthCheckResp {
+}
+
+/* Here for future compatibility */
+message DestroyReq {
+}
+
+/* Here for future compatibility */
+message DestroyResp {
+}

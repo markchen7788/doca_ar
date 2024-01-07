@@ -1,0 +1,33 @@
+#
+# Copyright (c) 2021-2022 NVIDIA CORPORATION & AFFILIATES, ALL RIGHTS RESERVED.
+#
+# This software product is a proprietary product of NVIDIA CORPORATION &
+# AFFILIATES (the "Company") and all right, title, and interest in and to the
+# software product, including all associated intellectual property rights, are
+# and shall remain exclusively with the Company.
+#
+# This software product is governed by the End User License Agreement
+# provided with the software product.
+#
+[binaries]
+c = '/opt/mellanox/doca/tools/dpa-clang'
+ar = '/opt/mellanox/doca/tools/dpa-ar'
+nm = '/opt/mellanox/doca/tools/dpa-nm'
+
+[host_machine]
+system = 'none'
+cpu_family = 'riscv64'
+cpu = 'riscv'
+endian = 'little'
+
+[target_machine]
+system = 'none'
+cpu_family = 'riscv64'
+cpu = 'riscv'
+endian = 'little'
+
+[built-in options]
+c_args = ['-mno-relax', '-nostdlib', '-Wdouble-promotion']
+
+[properties]
+needs_exe_wrapper = true
