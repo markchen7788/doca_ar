@@ -171,7 +171,7 @@
         * Client: DPU with DOCA 1.5
         * Server: DPU with any version DOCA (CX6 May work)
     * Compile in Client DPU：
-        > # Download src code onto Client DPU Arm <br>
+        > #Download src code onto Client DPU Arm <br>
         > meson build <br>
         > ninja -C build <br>
 
@@ -210,7 +210,7 @@
 #### Limitations
 * VTEP was placed on the Host and not offloaded to Arm;
 * Only track the connection based on the tunnel head, without identifying the head inside the tunnel. When there are few connections, a basic Overlay connection corresponds to a different tunnel 5-tuple;
-* Blocking probe, which does not send new connections before the probe function expires, can easily lead to a decrease in CPS;
+* Blocking probe, which does not send new connections before the probe function expires or arm receives the returned probe packets, can easily lead to a decrease in CPS;
 * The AR algorithm is too rough and simple.
 
 #### Demonstration and Docs
