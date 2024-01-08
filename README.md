@@ -1,7 +1,7 @@
 ![doca-ar-logo.png](./docs/logo.png)
 # DOCA-AR
 
-#### 介绍
+#### 介绍[[中文](./README.md)|[English](./README.en.md)]
 * **应用简介：基于DOCA的自适应路由**
     1. 利用NVIDIA BlueField-2 DPU卸载基于主动探测的自适应路由算法，实现VXLAN等Overlay流量的逐流负载均衡;
     2. DOCA-AR实现了基于全局拥塞感知的负载均衡，通过在端侧发送探测报文获取拥塞状态并帮助流量避开拥塞点从而改善尾时延；
@@ -188,7 +188,7 @@
     * 在Arm中，运行如下两个脚本，建立两个SF、修改OvS拓扑并下发OvS流表;
         > bash scripts/2SF-ON-P0-Build.sh <br>
         > bash scripts/2SF-ON-P0-INIT.sh
-    * 在Host中，ecmpecmp
+    * 在Host中，创建VTEP;
         > ip link add vxlan0 type vxlan id 42 dstport 4789 remote 192.168.200.1 local 192.168.200.2 dev enp1s0f0np0 <br>
         > ifconfig vxlan0 192.168.233.2
 
