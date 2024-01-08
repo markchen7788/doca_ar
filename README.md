@@ -3,7 +3,7 @@
 
 #### 介绍
 * **应用简介：基于DOCA的自适应路由**
-    1. 利用NVIDIA BlueField-2 DPU卸载基于主动探测的自适应路由算法，实现VXLAN等overlay流量的逐流负载均衡;
+    1. 利用NVIDIA BlueField-2 DPU卸载基于主动探测的自适应路由算法，实现VXLAN等Overlay流量的逐流负载均衡;
     2. DOCA-AR实现了基于全局拥塞感知的负载均衡，通过在端侧发送探测报文获取拥塞状态并帮助流量避开拥塞点从而改善尾时延；
     3. DOCA-AR部署在DPU，既拥有主机方案易感知全局状态的特点，也拥有交换机方案不修改主机协议栈的优势。
 * **性能表现：如下是我们测试的多路径环境拓扑图和尾时延测试结果**
@@ -128,7 +128,7 @@
         * 按照调度粒度分类：
             * 逐流，例如ECMP，PLB，开销最小但是粒度大；
             * 逐flowlet，例如CONGA；
-            * 逐包，例如NVIDIA spectrum自带的Adaptive Routing，乱序导致开销大但是粒度细；
+            * 逐包，例如NVIDIA Spectrum自带的Adaptive Routing(For RDMA)，乱序导致开销大但是粒度细；
         * 按照实现位置分类：
             * 基于交换机，例如NVIDIA Spectrum自带的Adaptive Routing，不易感知全局拥塞状态、实现比端侧难但不需要端侧修改协议栈；
             * 基于Host，例如CLOVE，容易感知全局拥塞状态但通常需要修改主机协议栈；
