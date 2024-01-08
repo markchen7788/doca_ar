@@ -165,10 +165,37 @@
 
 
 #### 使用教程
+0.  程序编译 
+    * 环境要求
+        * Client: DPU with DOCA 1.5
+        * Server: DPU with any version DOCA (CX6应该也可以，做好探测包回传即可)
+    * Client DPU编译动作：
+        > #下载此仓库源码到Client DPU Arm中 <br>
+        > meson build <br>
+        > ninja -C build <br>
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  接收端配置：
+    * 在Arm中，下发DPU-OvS 流表，分离探测包并用hairpin卸载回传动作, 我们是在二层环境做的实验，所以不交换IP,修改目的地址即可；
+        > ovs-ofctl del-flows ovsbr1 <br>
+        > ovs-ofctl add-flow ovsbr1 "priority=300,in_port=p0,udp,tp_dst=4789,nw_tos=0x20 actions=mod_dl_dst:08:c0:eb:bf:ef:9a,mod_tp_dst:4788,output:IN_PORT" <br>
+        > ovs-ofctl add-flow ovsbr1 "priority=100,in_port=p0 actions=output:pf0hpf" <br>
+        > ovs-ofctl add-flow ovsbr1 "priority=100,in_port=pf0hpf actions=output:p0" <br>
+    * 在Host中，创建VTEP;
+        > ip link add vxlan0 type vxlan id 42 dstport 4789 remote 192.168.200.2 local 192.168.200.1 dev enp1s0f0np0 <br>
+        > ifconfig vxlan0 192.168.233.1
+
+2.  发送端配置
+    * 在Arm中，运行如下两个脚本，建立两个SF、修改OvS拓扑并下发OvS流表;
+        > bash scripts/2SF-ON-P0-Build.sh <br>
+        > bash scripts/2SF-ON-P0-INIT.sh
+    * 在Host中，ecmpecmp
+        > ip link add vxlan0 type vxlan id 42 dstport 4789 remote 192.168.200.1 local 192.168.200.2 dev enp1s0f0np0 <br>
+        > ifconfig vxlan0 192.168.233.2
+
+3.  运行程序
+    * 运行DOCA-AR：`bash doca_ar.sh`
+    * 运行ECMP最对比： `bash ecmp.sh`
+    * 进入程序控制台后，输入`quit`退出，输入`conntrack`打印当前活跃连接；
 
 #### 测试说明
 软件架构说明
