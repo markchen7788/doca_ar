@@ -198,14 +198,15 @@
     * 进入程序控制台后，输入`quit`退出，输入`conntrack`打印当前活跃连接；
 
 #### 测试说明
-    * 测试物理拓扑：和上述多路径环境一致；
-    * 设备型号：
-        * DPU： NVIDIA BF2 100GbE 
-        * CX6： NVIDIA CX6 100GbE 
-        * Router: Intel Barefoot P4 Switch 100GbE
-    * 测试软件：
-        * 在BF2设备上，使用的是iPerf发送的TCP流量，并运行在Overlay网络上；
-        * 在CX6设备上，使用的是DPDK-Pktgen产生的一条无状态UDP流，包大小为MTU，无拥塞控制；
+
+* 测试物理拓扑：和上述多路径环境一致；
+* 设备型号：
+    * DPU： NVIDIA BF2 100GbE 
+    * CX6： NVIDIA CX6 100GbE 
+    * Router: Intel Barefoot P4 Switch 100GbE
+* 测试软件：
+    * 在BF2设备上，使用的是iPerf发送的TCP流量，并运行在Overlay网络上；
+    * 在CX6设备上，使用的是DPDK-Pktgen产生的一条无状态UDP流，包大小为MTU，无拥塞控制；
 
 #### 演示及文档
 * 演示视频已上传至百度网盘，点我可前往查看实验过程；
