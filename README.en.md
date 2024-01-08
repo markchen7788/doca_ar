@@ -135,7 +135,7 @@
             * Based on controllers, such as Fastpass;
     * The commonly used network layer load balancing mechanism in data centers currently is ECMP, which adopts per-flow, stateless scheduling approach and does not perceive local congestion status or global congestion status;
 
-* **Application CContribution **：
+* **Application Contribution:**
     * **Explored the feasibility and effectiveness of a new load balancing scheme based on DPU, and provided effective source code and test data as support；**
     * **Compared to ECMP, it greatly improves the problem of long tail latency, simplifies deployment, eliminates the need to modify protocol stacks, and saves host CPU overhead caused by scheduling.**
 
