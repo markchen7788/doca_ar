@@ -1,0 +1,74 @@
+///////////////构建收端探测回传
+
+ovs-ofctl del-flows ovsbr1
+ovs-ofctl add-flow ovsbr1 "priority=300,in_port=p0,udp,tp_dst=4789,nw_tos=0x20 actions=mod_dl_dst:08:c0:eb:bf:ef:9a,mod_tp_dst:4788,output:IN_PORT"
+ovs-ofctl add-flow ovsbr1 "priority=100,in_port=p0 actions=output:pf0hpf" 
+ovs-ofctl add-flow ovsbr1 "priority=100,in_port=pf0hpf actions=output:p0"
+
+
+///////////////构建发端环境
+/opt/mellanox/iproute2/sbin/mlxdevm port add pci/0000:03:00.0 flavour pcisf pfnum 0 sfnum 4
+/opt/mellanox/iproute2/sbin/mlxdevm port add pci/0000:03:00.0 flavour pcisf pfnum 0 sfnum 5
+/opt/mellanox/iproute2/sbin/mlxdevm port function set pci/0000:03:00.0/229409 hw_addr 02:25:f2:8d:a2:4c trust on state active
+/opt/mellanox/iproute2/sbin/mlxdevm port function set pci/0000:03:00.0/229410 hw_addr 02:25:f2:8d:a2:5c trust on state active
+echo mlx5_core.sf.4  > /sys/bus/auxiliary/drivers/mlx5_core.sf_cfg/unbind
+echo mlx5_core.sf.4  > /sys/bus/auxiliary/drivers/mlx5_core.sf/bind
+echo mlx5_core.sf.5  > /sys/bus/auxiliary/drivers/mlx5_core.sf_cfg/unbind
+echo mlx5_core.sf.5  > /sys/bus/auxiliary/drivers/mlx5_core.sf/bind
+
+
+ovs-vsctl del-br sf4
+ovs-vsctl del-br sf5
+ovs-vsctl add-br sf4
+ovs-vsctl add-br sf5
+ovs-vsctl del-port pf0hpf
+ovs-vsctl del-port p0
+ovs-vsctl del-port en3f0pf0sf4
+ovs-vsctl del-port en3f0pf0sf5
+ovs-vsctl add-port sf4 pf0hpf
+ovs-vsctl add-port sf5 p0
+ovs-vsctl add-port sf4 en3f0pf0sf4
+ovs-vsctl add-port sf5 en3f0pf0sf5
+
+ifconfig enp3s0f0s4 up
+ifconfig enp3s0f0s5 up
+
+#sf flow tables offload
+sudo  ethtool -K pf0hpf hw-tc-offload on
+sudo  ethtool -K p0 hw-tc-offload on
+sudo  ethtool -K enp3s0f0s4 hw-tc-offload on
+sudo  ethtool -K enp3s0f0s5 hw-tc-offload on
+sudo  ethtool -K en3f0pf0sf4 hw-tc-offload on
+sudo  ethtool -K en3f0pf0sf5 hw-tc-offload on
+sudo  ovs-appctl dpctl/dump-flows type=offloaded
+sudo  ovs-vsctl set Open_vSwitch . Other_config:hw-offload=true
+sudo  /etc/init.d/openvswitch-switch restart
+
+sudo ovs-ofctl del-flows sf5
+sudo ovs-ofctl add-flow sf5 "in_port=p0 action=en3f0pf0sf5"
+sudo ovs-ofctl add-flow sf5 "in_port=en3f0pf0sf5 action=p0"
+
+sudo ovs-ofctl del-flows sf4
+sudo ovs-ofctl add-flow sf4 "in_port=pf0hpf action=en3f0pf0sf4"
+sudo ovs-ofctl add-flow sf4 "in_port=en3f0pf0sf4 action=pf0hpf"
+
+///////////////////////////构建主机测Vxlan环境
+yy:
+ip link add vxlan0 type vxlan \
+id 42 \
+dstport 4789 \
+remote 192.168.200.2 \
+local 192.168.200.1 \
+dev enp1s0f0np0
+ifconfig vxlan0 192.168.233.1
+
+cq:
+ip link add vxlan0 type vxlan \
+id 42 \
+dstport 4789 \
+remote 192.168.200.1 \
+local 192.168.200.2 \
+dev enp1s0f0np0
+ifconfig vxlan0 192.168.233.2
+
+
