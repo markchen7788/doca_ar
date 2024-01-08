@@ -167,9 +167,11 @@ uint16_t AR(struct rte_mempool *pool, struct doca_ar_conn_match *match, struct r
                         struct PROBE_HDR *hdr = rte_pktmbuf_mtod_offset(m, struct PROBE_HDR *, sizeof(struct rte_ether_hdr) + sizeof(struct rte_ipv4_hdr) + sizeof(struct rte_udp_hdr));
                         if (hdr->FlowID == flowID)
                         {
+                            uint16_t res = udp->src_port;
                             if (this_udp_h->src_port != udp->src_port)
                                 DOCA_LOG_INFO("FlowTD[%lu]:%d==>%d", flowID, rte_be_to_cpu_16(this_udp_h->src_port), rte_be_to_cpu_16(udp->src_port));
-                            return udp->src_port;
+                            rte_pktmbuf_free(m);
+                            return res;
                         }
                     }
                 }
