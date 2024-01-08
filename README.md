@@ -215,5 +215,5 @@
 * AR算法过于粗暴简单。
 
 #### 演示及文档
-* 演示视频已上传至百度网盘，点我可前往查看实验过程；
+* 演示视频已上传至百度网盘，[点我可前往查看实验过程](https://pan.baidu.com/s/1NnJ9KSgeFwUsq3ykk-ufjw?pwd=adv8)；
 * [点我可查看API文档](https://markchen7788.github.io/doca_ar/html/)
